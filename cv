@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cette page est cool 2.0</title>
+        <meta charset="utf-8">
+        <link rel='stylesheet' href='css\style.css' type='text.css'/>
+    </head>
+    <body>
+		
+		<nav>
+			<ul> <a href="truc a mettre en html">home</a> </ul>
+			<ul>cv</ul>
+			
+		</nav>
+		
+    <p>ceci est un cv, moins dévloppé que la page d'accueil du fait que je suis malade mais on va quand meme faire des tests</p>
+    <section id="pomme">
+    section ou il devrais il y avoir mes études
+    </section>
+    
+    <section id="poire">
+    section ou il devrais il y avoir mes données
+    </section>
+		<footer>06/02/2015,copyright Raphael Muller</footer>
+    </body>
+</html>
