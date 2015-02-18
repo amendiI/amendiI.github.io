@@ -2,7 +2,7 @@ body{color: rgb(200,200,255);background-color: rgb(10,10,10);}
 section{border-style: solid;border-width: 2px;margin-bottom:15px;margin-right:5px;margin-top:15px}
 #pomme {color:grey;display: inline-block;}
 #poire {color:white;display: inline-block;}
-#peche {display: block;}
+#peche {display:inline-block;}
 img{float: right;}
 table{font-size: 150%;}
 
