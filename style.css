@@ -7,13 +7,13 @@ table{font-size: 150%;}
 
 @media (max-width: 600px) {
     nav {
-        background-color: red;
+        background-color: rgb(200,255,255);
     }
 }
 
 @media (min-width: 600px) {
     nav {
-        background-color: rgb(150,150,255);
+        background-color: rgb(200,200,255);
     }
 }
 
