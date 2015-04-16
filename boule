@@ -12,6 +12,21 @@
 int score;
 int T[large][haut];
 
+void test_tab(int T[large][haut])
+{
+	int i,j;
+	for (i=0;i<haut;i++)
+	{
+		printf("\n");
+		for (j=0;j<large;j++)
+		{
+			printf("%d  ",T[i][j]);
+		}
+		
+	}
+	printf("\n");printf("\n");
+}
+
 //ok
 void init_jeu()
 {
@@ -25,18 +40,9 @@ void init_jeu()
 		}
 		
 	}
-	
-	for (i=0;i<haut;i++)
-	{
-		printf("\n");
-		for (j=0;j<large;j++)
-		{
-			printf("%d  ",T[i][j]);
-		}
-		
-	}
-	printf("\n");printf("\n");
+	test_tab(T);
 }
+
 //ok
 void affiche_quadrillage()
 {
@@ -74,7 +80,7 @@ void affiche_jeu()
 			for (j = 0; j < large; j++)
 			{
 				p.x=(taille_case/2)+j*taille_case;
-				p.y=abs((taille_case/2)+i*taille_case-haut-1);
+				p.y=(haut*taille_case)-((taille_case/2)+i*taille_case);
 				
 				if(T[i][j]==11){c=rouge;}
 				if(T[i][j]==12){c=bleu;}
@@ -83,7 +89,6 @@ void affiche_jeu()
 				if(T[i][j]==0 ){c=noir;}
 				
 				draw_fill_circle(p,taille_case/2,c);
-				
 				
 			}
 			
@@ -147,14 +152,11 @@ void clic()
 	y=abs((p.y/taille_case)-(haut))-1;
 	
 	printf("x: %d y: %d \n",x,y);
-	printf("%d\n",T[x][y]);
+	printf("val: %d\n",T[x][y]);
 	
-	if(T[x][y]!=0 && test_case(x,y)==1)
-	{
-
-		effacer(x,y,T[x][y]);
-		
-	}
+	printf(" test case: %d\n",test_case(x,y));
+	if(T[x][y]!=0 && test_case(x,y)==1) {effacer(x,y,T[x][y]);}
+	
 }
 
 int main ()
