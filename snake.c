@@ -1,211 +1,237 @@
 #include "graphics.h"
 
-// Définition des différentes formes
+#define haut 10
+#define large 10
+#define taille_case 50
 
-#define VIDE 0
-#define CERCLE 100
-#define CARRE 101
-#define CROIX 102
+//11=rouge
+//12=bleu
+//13=vert
+//14=jaune
 
-// Définition des types
+int score;
+int T[large][haut];
 
-struct elem {
-  int i,j; // position sur le quadrillage de l'élément
-  int forme; // vaut VIDE, CERCLE, CARRE ou CROIX
-  COULEUR coul; // vaut bleu, rouge, jaune ou vert
-};
-
-
-struct serpent {
-  int longueur; // nombre d'éléments dans le corps du serpent
-  struct elem A[200]; // les éléments constitutifs du serpent
-  POINT direction;
-};
-
-// Fonctions à écrire
-void init_objet(struct elem J[40][60])
-{
-	int i,j,coul,f;
-	i=alea_int(40);
-	j=alea_int(60);
-	f=alea_int(3);
-	coul=alea_int(4);
-	if(coul==1){J[i][j].coul=bleu;}
-	if(coul==2){J[i][j].coul=rouge;}
-	if(coul==3){J[i][j].coul=jaune;}
-	if(coul==0){J[i][j].coul=vert;}
-	if(f==0){J[i][j].forme=CARRE;}
-	if(f==1){J[i][j].forme=CERCLE;}
-	if(f==2){J[i][j].forme=CROIX;}	
-}
-
-void init_jeu(struct elem J[40][60])
-{
-	int c,v;
-	for (c=0;c<40;c++)
-	{
-		for (v=0;v<60;v++)
-		{
-			J[c][v].forme=VIDE;
-			}
-	}
-	for (c=0;c<24;c++){init_objet(J);}
-}
-
-struct serpent init_serpent()
-{
-	struct serpent S;
-	int c;
-	S.longueur=0;
-	for(c=0;c<200;c++)
-	{
-		S.A[c].i=0;
-		S.A[c].j=0;
-		S.A[c].coul=noir;
-		S.A[c].forme=VIDE;
-	}
-	S.A[0].i=alea_int(40);
-	S.A[0].j=alea_int(60);
-	S.longueur=1;
-	return S;
-}
-
-void dessine_carre(int i,int j,COULEUR coul)
-{
-	POINT p,p2;
-	p.x=i*10;p.y=j*10;p2.x=p.x+10;p2.y=p.y+10;
-	draw_fill_rectangle(p,p2,coul);
-}
-
-void dessine_cercle(int i,int j,COULEUR coul)
-{
-	POINT p;
-	p.x=i*10+5;p.y=j*10+5;
-	draw_fill_circle(p,5,coul);
-}
-
-void dessine_croix(int i,int j,COULEUR coul)
-{
-	POINT p,p2;
-	p.x=i*10;p.y=j*10;
-	p2.x=p.x+10;p2.y=p.y+10;
-	draw_line(p,p2, coul);
-	p.x=i*10;p.y=j*10+10;
-	p2.x=p.x+10;p2.y=p.y-10;
-	draw_line(p,p2,coul);
-}
-
-void dessin_case(int i,int j, struct elem J[40][60])
-{
-	COULEUR coul;
-	coul=J[i][j].coul;
-	if(J[i][j].forme==CARRE){dessine_carre(i,j,coul);}
-	if(J[i][j].forme==CERCLE){dessine_cercle(i,j,coul);}
-	if(J[i][j].forme==CROIX){dessine_croix(i,j,coul);}
-}
-
-void affiche_jeu(struct elem J[40][60])
+void test_tab(int T[large][haut])
 {
 	int i,j;
-	for (i=0;i<40;i++)
+	for (i=0;i<haut;i++)
 	{
-		for (j=0;j<60;j++)
+		printf("\n");
+		for (j=0;j<large;j++)
 		{
-			dessin_case(i,j,J);
+			printf("%d  ",T[i][j]);
+		}
+		
+	}
+	printf("\n");printf("\n");
+}
+
+//ok
+void init_jeu()
+{
+	int i,j;
+	
+	for (i=0;i<haut;i++)
+	{
+		for (j=0;j<large;j++)
+		{
+			T[i][j]=alea_int(4)+11;
+		}
+		
+	}
+}
+
+//ok
+void affiche_quadrillage()
+{
+	int i;
+	POINT p1,p2;
+	
+	for(i=1;i<large;i++)
+	{
+		p1.y=0;				p2.y=haut*taille_case;
+		p1.x=i*taille_case;	p2.x=i*taille_case;
+		
+		draw_line(p1,p2,blanc);
+		
+	}
+	
+	for(i=1;i<haut;i++)
+	{
+		p1.x=0;				p2.x=large*taille_case;
+		p1.y=i*taille_case;	p2.y=i*taille_case;
+		
+		draw_line(p1,p2,blanc);
+		
+	}
+	
+}
+//ok
+void affiche_jeu()
+{
+		int i,j;
+		POINT p;
+		COULEUR c;
+		
+		for (i = 0; i < haut; i++)
+		{
+			for (j = 0; j < large; j++)
+			{
+				p.x=(taille_case/2)+j*taille_case;
+				p.y=(taille_case/2)+i*taille_case;
+				
+				if(T[j][i]==11){c=rouge;}
+				if(T[j][i]==12){c=bleu;}
+				if(T[j][i]==13){c=vert;}
+				if(T[j][i]==14){c=jaune;}
+				if(T[j][i]==0 ){c=noir;}
+				
+				draw_fill_circle(p,taille_case/2,c);
+				
+			}
+			
+		}
+		
+}
+//ok
+void affiche()
+{
+	fill_screen(noir);
+	affiche_quadrillage();
+	affiche_jeu();
+	affiche_all();	
+}
+//ok
+int test_case(int x, int y)
+{
+	int c,b;
+	
+	c=T[x][y];
+	
+	b=T[x+1][y];
+	if(c==b){return 1;}
+	
+	b=T[x][y+1];
+	if(c==b){return 1;}
+	
+	b=T[x-1][y];
+	if(c==b){return 1;}
+	
+	b=T[x][y-1];
+	if(c==b){return 1;}
+	  
+	return 0;
+}
+
+void effacer(int x,int y,int val)
+{
+	
+	if(T[x][y]!=val){return ;}
+	if(x<0)			{return ;}
+	if(x>=haut)		{return ;}
+	if(y<0)			{return ;}
+	if(y>=large)	{return ;}
+	
+
+	T[x][y]=0;
+
+	effacer(x+1,y,val);
+	effacer(x-1,y,val);
+	effacer(x,y+1,val);
+	effacer(x,y-1,val);
+}
+
+void clic()
+{
+	int x,y;
+	POINT p;
+	
+	p=wait_clic();
+	x=(p.x/taille_case);
+	y=(p.y/taille_case);
+	
+
+	if(T[x][y]!=0 && test_case(x,y)==1) {effacer(x,y,T[x][y]);}
+	
+}
+
+void descendre_une_boule(int x,int y)
+{
+	
+	if(T[x][y]==0){return;}
+	while((T[x][y-1]==0) && (y>0))
+	{
+		T[x][y-1]=T[x][y];
+		T[x][y]=0;
+		y--;
+	}
+	
+	
+}
+
+void decale_gauche()
+{
+	int y,x,i;
+	
+	for(y=large-1;y<0;y--)
+	{
+		if(T[0][y]==0 )
+		{
+			i=y;
+			while (i<large-1 && T[0][i+1]==0)
+			{
+				for(x=0;x<haut;x++)
+				{
+					T[x][y+1]=T[x][y];
+					T[x][y]=0;
+				}
+			}
+			
 		}
 	}
 }
 
-void affiche_serpent(struct serpent S,struct elem J[40][60])
+void descendre ()
 {
-	POINT p;
-	int c;
-	p.x=S.A[0].i*10+5;p.y=S.A[0].j*10+5;
-	draw_fill_circle(p,5,blanc);
-	for(c=S.longueur;c>0;c--)
+	int x,y;
+	
+	for (y = 0; y < haut; y++)
 	{
-		COULEUR coul;
-		int i,j;
-		i=S.A[c].i;
-		j=S.A[c].j;
-		coul=S.A[c].coul;
-		if(S.A[c].forme==CARRE){dessine_carre(i,j,coul);}
-		if(S.A[c].forme==CERCLE){dessine_cercle(i,j,coul);}
-		if(S.A[c].forme==CROIX){dessine_croix(i,j,coul);}
+		for (x = 0; x < large; x++)
+		{
+			descendre_une_boule(x,y);
+		}
+		
 	}
+	decale_gauche();
+	
 }
 
-struct serpent valeur_serpent( struct serpent S)
+int main ()
 {
-	int c;
-	for(c=S.longueur;c>=1;c--)
-	{
-		S.A[c].i=S.A[c-1].i;
-		S.A[c].j=S.A[c-1].j;
-	}
-	return (S);
-}
 
-struct serpent deplace_serpent (struct serpent S, POINT p)
+init_graphics (large*taille_case,haut*taille_case);
+affiche_auto_off();
+
+int perdu ;
+
+
+init_jeu();
+
+perdu=1;
+
+
+while (perdu)
 {
-	S=valeur_serpent(S);
-	if (p.x!=0 || p.y != 0){S.direction=p;}
-	if (S.direction.x>0){S.A[0].i++;}
-	if (S.direction.x<0){S.A[0].i--;}
-	if (S.direction.y>0){S.A[0].j++;}
-	if (S.direction.y<0){S.A[0].j--;}
-	return (S);
-}
+		
+	affiche();
+	clic();
+	descendre();
 
-struct serpent manger(struct serpent S,struct elem E[40][60])
-{
-	int i,j;
-	i=S.A[0].i;
-	j=S.A[0].j;
-
-	if(E[i][j].forme != 0)
-	{
-		S.A[S.longueur].forme=E[i][j].forme;
-		S.A[S.longueur].coul=E[i][j].coul;
-		S.longueur++;
-		E[i][j].forme=VIDE;
-	}
-	return(S);
-}
-
-void mort(struct serpent S)
-{
-	if(S.A[0].i>40){exit(1);}
-	if(S.A[0].i<0){exit(2);}
-	if(S.A[0].j<0){exit(3);}
-	if(S.A[0].j>60){exit(4);}
-}
-
-int main()
-{
-		struct elem J[40][60];
-	struct serpent S;
-	POINT p;
-
-	init_graphics(400,600);
-	init_jeu(J);
-	S = init_serpent();
-	affiche_auto_off();
-	while (1)
-	{
-		p = get_arrow();
-		S = deplace_serpent(S,p);
-		mort(S);
-		S=manger(S,J);
-
-		affiche_jeu(J);
-		affiche_serpent(S,J);
-		affiche_all();
-		attendre(80);
-		fill_screen(noir);
-	}
-	wait_escape();
-	  exit(0);
 }
 
 
+wait_escape();
+exit(0);
+}
